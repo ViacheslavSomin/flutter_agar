@@ -1,0 +1,69 @@
+group 'ua.com.epam.agar.flutter_agar'
+version '1.0-SNAPSHOT'
+
+Properties props = new Properties()
+def propFile = file('../../secrets/github.properties')
+props.load(new FileInputStream(propFile))
+
+
+buildscript {
+    ext.kotlin_version = '1.6.10'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/pavlozoria/agarepam")
+            credentials {
+                username = props['gitHubUser']
+                password = props['gitHubKey']
+            }
+        }
+    }
+}
+
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 31
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        minSdkVersion 24
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "ua.com.epam.agar.engine:engine-agar-epam:0.0.4"
+
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+}
