@@ -16,6 +16,10 @@ export 'src/src.dart'
         CellActivity,
         GrowIntention,
         ClientRoomView,
+        AgarClientView,
+        MoveAction,
+        Split,
+        Merge,
         Position;
 
 class FlutterAgar {

@@ -2,6 +2,7 @@ package ua.com.epam.agar.flutter_agar
 
 import android.os.Handler
 import android.os.Looper
+import com.google.gson.Gson
 import io.flutter.plugin.common.MethodChannel
 import kotlin.reflect.full.memberProperties
 
@@ -9,6 +10,14 @@ import kotlin.reflect.full.memberProperties
 inline fun <reified T : Any> T.asHashMap(): HashMap<String, Any?> {
     val props = T::class.memberProperties.associateBy { it.name }
     return HashMap(props.keys.associateWith { props[it]?.get(this) })
+}
+
+inline fun <reified T : Any> Gson.mapToObject(map: HashMap<String, Any?>?): T? {
+    if (map==null) return null
+
+    val json = this.toJson(map)
+
+    return this.fromJson(json, T::class.java)
 }
 
 

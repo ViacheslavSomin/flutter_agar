@@ -55,7 +55,7 @@ class FlutterAgarPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun startGame(roomId: String) {
-        GameEngine.startGame(roomId,false)
+        GameEngine.startGame(roomId,true)
     }
 
     private fun stopGame() {

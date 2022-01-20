@@ -19,11 +19,6 @@ class ClientRoomView extends StatelessWidget {
       body: WebView(
         initialUrl: '$_baseUrl?room=$roomId',
         javascriptMode: JavascriptMode.unrestricted,
-        zoomEnabled: false,
-        debuggingEnabled: true,
-        onWebResourceError: (error) {
-          log('$error');
-        },
       ),
     );
   }

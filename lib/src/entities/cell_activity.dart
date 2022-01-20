@@ -14,7 +14,7 @@ class CellActivity {
     this.velocity,
     this.growIntention,
     this.additionalAction,
-  });
+  }) : assert(speed >= 0.0 && speed <= 1.0);
 
   final String cellId;
   final double speed;

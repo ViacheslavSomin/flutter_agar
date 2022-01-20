@@ -12,21 +12,14 @@ class CellLogicImpl extends CellLogic {
 
       final targetPosition = findClosestFood(mapState, myCell)?.position;
 
-      final speed = targetPosition != null
-          ? targetPosition.distanceTo(cellPosition) <
-                  (myCell.property.radius * 5)
-              ? targetPosition.distanceTo(cellPosition) /
-                  (myCell.property.radius * 2.5)
-              : 1.0
-          : 1.0;
-
       cellActivities.add(
         CellActivity(
           cellId: myCell.cellId,
-          speed: speed,
+          speed: 1.0,
           velocity: cellPosition.moveTo(targetPosition),
           growIntention: GrowIntention(
-            maxSpeed: myCell.availableEnergy,
+            mass: myCell.availableEnergy * 0.3,
+            maxSpeed: myCell.availableEnergy * 0.7,
           ),
         ),
       );

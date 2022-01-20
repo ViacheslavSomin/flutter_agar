@@ -8,3 +8,4 @@ export 'grow_intention.dart';
 export 'map_state.dart';
 export 'position.dart';
 export 'velocity.dart';
+export 'move_action.dart';

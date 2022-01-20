@@ -1,19 +1,35 @@
 package ua.com.epam.agar.flutter_agar
 
 
+import android.util.Log
 import com.google.gson.Gson
 import io.flutter.plugin.common.MethodChannel
+import ua.com.epam.agar.hackathon.core.entity.cell.property.CellActivity
+import ua.com.epam.agar.hackathon.core.entity.cell.property.CellId
+import ua.com.epam.agar.hackathon.core.entity.cell.property.MoveAction
 import ua.com.epam.agar.hackathon.core.entity.main.DesiredCellsState
 import ua.com.epam.agar.hackathon.core.entity.main.MapState
 import ua.com.epam.agar.hackathon.core.entity.public_api.CellLogic
 
+@Suppress("UNCHECKED_CAST")
 class CellLogicImpl(private val methodChannel: MethodChannel) : CellLogic() {
 
     private val gson = Gson()
 
-
     override fun handleGameUpdate(mapState: MapState): DesiredCellsState? {
-        val mapStateHashMap = hashMapOf(
+        val mapStateHashMap = convertMapStateToHashMap(mapState)
+
+        val resultHashMap = methodChannel.invokeMethodSync(
+            Constants.HANDLE_GAME_UPDATE,
+            mapStateHashMap
+        ) as? HashMap<String, Any?>
+
+//        return gson.mapToObject(resultHashMap)
+        return mapToDesiredCellsState(resultHashMap)
+    }
+
+    private fun convertMapStateToHashMap(mapState: MapState): HashMap<String, Any> {
+        return hashMapOf(
             "gameTick" to mapState.gameTick,
             "myCells" to mapState.myCells.map {
                 hashMapOf(
@@ -52,19 +68,37 @@ class CellLogicImpl(private val methodChannel: MethodChannel) : CellLogic() {
                 )
             },
         )
+    }
 
-        @Suppress("UNCHECKED_CAST")
-        val resultMap = methodChannel.invokeMethodSync(
-            Constants.HANDLE_GAME_UPDATE,
-            mapStateHashMap
-        ) as? HashMap<String, Any?> ?: return null
+    private fun mapToDesiredCellsState(resultHashMap: HashMap<String, Any?>?): DesiredCellsState? {
+        if (resultHashMap == null) return null
 
-        val resultJson = gson.toJson(resultMap)
+        try {
+            val myCells = resultHashMap["myCells"] as List<HashMap<String, Any?>>
 
-        return gson.fromJson(
-            resultJson,
-            DesiredCellsState::class.java
+            return DesiredCellsState(myCells = myCells.map {
+                CellActivity(
+                    cellId = CellId(it["cellId"] as String),
+                    speed = (it["speed"] as Double).toFloat(),
+                    velocity = gson.mapToObject(it["velocity"] as? HashMap<String, Any?>),
+                    growIntention = gson.mapToObject(it["growIntention"] as? HashMap<String, Any?>),
+                    additionalAction = mapAdditionalAction(it["additionalAction"] as? HashMap<String, Any?>)
+                )
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    private fun mapAdditionalAction(hashMap: HashMap<String, Any?>?): MoveAction? {
+        if (hashMap == null) return null
+
+        if ((hashMap["type"] as String) == "merge") return MoveAction.Merge(
+            cellId = CellId(hashMap["cellId"] as String)
         )
+
+        return MoveAction.Split
     }
 
 
