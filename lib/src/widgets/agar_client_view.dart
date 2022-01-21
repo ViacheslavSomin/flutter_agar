@@ -50,48 +50,47 @@ class _AgarClientViewState extends State<AgarClientView> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).padding.top -
-                  MediaQuery.of(context).padding.bottom,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextField(
-                    controller: _roomIdController,
-                    decoration: const InputDecoration(labelText: 'RoomId'),
+        appBar: AppBar(
+          title: const Text('Flutter Agar'),
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _roomIdController,
+                  decoration: const InputDecoration(
+                    labelText: 'RoomId',
+                    filled: true,
                   ),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await FlutterAgar().startGame(_roomIdController.text);
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    await FlutterAgar().startGame(_roomIdController.text);
 
-                      /* Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ClientRoomView(
-                            roomId: _roomIdController.text,
+                    /* Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ClientRoomView(
+                              roomId: _roomIdController.text,
+                            ),
                           ),
-                        ),
-                      ); */
-                    },
-                    child: const Text('Start'),
-                  ),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      FlutterAgar().stopGame();
-                    },
-                    child: const Text('Stop'),
-                  ),
-                ],
-              ),
+                        ); */
+                  },
+                  child: const Text('Start'),
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    FlutterAgar().stopGame();
+                  },
+                  child: const Text('Stop'),
+                ),
+              ],
             ),
           ),
         ),
