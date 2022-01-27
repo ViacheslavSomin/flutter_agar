@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_agar/flutter_agar.dart';
 import 'package:flutter_agar_example/cell_logic_impl.dart';
 
-void main() async {
+void main() {
   runApp(const MyApp());
 }
 

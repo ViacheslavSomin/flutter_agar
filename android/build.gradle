@@ -1,9 +1,7 @@
 group 'ua.com.epam.agar.flutter_agar'
 version '1.0-SNAPSHOT'
 
-Properties props = new Properties()
-def propFile = file('../../secrets/github.properties')
-props.load(new FileInputStream(propFile))
+
 
 
 buildscript {
@@ -23,14 +21,7 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/pavlozoria/agarepam")
-            credentials {
-                username = props['gitHubUser']
-                password = props['gitHubKey']
-            }
-        }
+
     }
 }
 

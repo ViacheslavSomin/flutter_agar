@@ -1,15 +1,51 @@
 # flutter_agar
 
-A new flutter plugin project.
+## Set up
 
-## Getting Started
+1. Create a new flutter project
+2. Add the following dependency to `pubspec.yaml` file
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+   ```yaml
+   dependencies:
+     flutter:
+       sdk: flutter
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+     flutter_agar:
+       git:
+         url: https://github.com/ViacheslavSomin/flutter_agar.git
+   ```
 
+3. Create your own implementation of `CellLogic` class
+
+   ```dart
+   import 'package:flutter_agar/flutter_agar.dart';
+
+   class CellLogicImpl implements CellLogic {
+     @override
+     DesiredCellsState? handleGameUpdate(MapState mapState) {
+       // Your logic
+       return DesiredCellsState(myCells: myCells);
+     }
+   }
+   ```
+
+4. In `main.dart` pass `AgarClientView` to `MaterialApp`'s `home` property and pass `CellLogicImpl` to `AgarClientView`s `cellLogic` property
+
+   ```dart
+   void main() {
+     runApp(const MyApp());
+   }
+
+   class MyApp extends StatelessWidget {
+     const MyApp({Key? key}) : super(key: key);
+
+     @override
+     Widget build(BuildContext context) {
+       return MaterialApp(
+         home: AgarClientView(
+           cellLogic: CellLogicImpl(),
+         ),
+       );
+     }
+   }
+   ```

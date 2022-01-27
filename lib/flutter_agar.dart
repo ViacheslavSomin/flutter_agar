@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -23,13 +24,15 @@ export 'src/src.dart'
         Position;
 
 class FlutterAgar {
-  FlutterAgar._();
+  static final _instance = FlutterAgar._();
 
   static const MethodChannel _channel = MethodChannel(
     Constants.methodChannelName,
   );
 
-  static final _instance = FlutterAgar._();
+  FlutterAgar._() {
+    _setup();
+  }
 
   factory FlutterAgar() {
     return _instance;
@@ -37,11 +40,30 @@ class FlutterAgar {
 
   late CellLogic _cellLogic;
 
+  void _setup() {
+    _channel.setMethodCallHandler((call) async {
+      try {
+        if (call.method == Constants.handleGameUpdate) {
+          return await _handleGameUpdate(call);
+        }
+      } catch (e, s) {
+        log('$e\n\n$s');
+      }
+    });
+  }
+
+  Future<Map<String, dynamic>?> _handleGameUpdate(MethodCall call) async {
+    final mapState = MapState.fromJson(
+      Map<String, dynamic>.from(call.arguments),
+    );
+
+    return _cellLogic.handleGameUpdate(mapState)?.toJson();
+  }
+
   Future<void> initializeGameEngine(CellLogic cellLogic) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     _cellLogic = cellLogic;
-    _cellLogic.setup(_channel);
 
     return _channel.invokeMethod(Constants.initializeGameEngine);
   }

@@ -1,6 +1,6 @@
 import 'package:flutter_agar/flutter_agar.dart';
 
-class CellLogicImpl extends CellLogic {
+class CellLogicImpl implements CellLogic {
   @override
   DesiredCellsState? handleGameUpdate(MapState mapState) {
     final myCells = mapState.myCells;

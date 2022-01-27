@@ -1,3 +1,8 @@
+
+Properties props = new Properties()
+def propFile = file('../../../secrets/github.properties')
+props.load(new FileInputStream(propFile))
+
 buildscript {
     ext.kotlin_version = '1.6.10'
     repositories {
@@ -15,6 +20,14 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/pavlozoria/agarepam")
+            credentials {
+                username = props['gitHubUser']
+                password = props['gitHubKey']
+            }
+        }
     }
 }
 

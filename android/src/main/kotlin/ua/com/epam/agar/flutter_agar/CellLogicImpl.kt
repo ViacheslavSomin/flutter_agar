@@ -1,7 +1,6 @@
 package ua.com.epam.agar.flutter_agar
 
 
-import android.util.Log
 import com.google.gson.Gson
 import io.flutter.plugin.common.MethodChannel
 import ua.com.epam.agar.hackathon.core.entity.cell.property.CellActivity
@@ -24,7 +23,6 @@ class CellLogicImpl(private val methodChannel: MethodChannel) : CellLogic() {
             mapStateHashMap
         ) as? HashMap<String, Any?>
 
-//        return gson.mapToObject(resultHashMap)
         return mapToDesiredCellsState(resultHashMap)
     }
 

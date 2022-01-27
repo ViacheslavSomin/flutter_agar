@@ -22,6 +22,13 @@ class _AgarClientViewState extends State<AgarClientView> {
     await FlutterAgar().stopGame();
   }
 
+  Future<void> _onReassemble() async {
+    await FlutterAgar().stopGame();
+    final roomId = _roomIdController.text;
+    if (roomId.isEmpty) return;
+    await FlutterAgar().startGame(roomId);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,7 +39,7 @@ class _AgarClientViewState extends State<AgarClientView> {
   @override
   void reassemble() {
     super.reassemble();
-    FlutterAgar().stopGame();
+    _onReassemble();
   }
 
   @override
@@ -70,7 +77,7 @@ class _AgarClientViewState extends State<AgarClientView> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
-                    await FlutterAgar().startGame(_roomIdController.text);
+                    await _startGame();
 
                     /* Navigator.push(
                           context,
@@ -96,5 +103,11 @@ class _AgarClientViewState extends State<AgarClientView> {
         ),
       ),
     );
+  }
+
+  Future<void> _startGame() async {
+    final roomId = _roomIdController.text;
+    if (roomId.isEmpty) return;
+    await FlutterAgar().startGame(roomId);
   }
 }
