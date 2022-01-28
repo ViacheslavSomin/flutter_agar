@@ -59,6 +59,10 @@
    gitHubKey=Your github personal access token
    ```
 
+   _Note:_
+
+   > Don't forget to check `write:packages` scope, when generating github personal access token.
+
 7. (Temporary) Add following code to android project's `build.gradle` file:
 
    ```gradle
