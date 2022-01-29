@@ -13,15 +13,18 @@ export 'src/src.dart'
         MapState,
         DesiredCellsState,
         Food,
+        Cell,
         MyCell,
+        AlienCell,
         CellActivity,
         GrowIntention,
-        ClientRoomView,
-        AgarClientView,
         MoveAction,
         Split,
         Merge,
-        Position;
+        Position,
+        Velocity,
+        ClientRoomView,
+        AgarClientView;
 
 class FlutterAgar {
   static final _instance = FlutterAgar._();
