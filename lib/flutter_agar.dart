@@ -68,7 +68,6 @@ class FlutterAgar {
   }
 
   void _configureCell(MethodCall call) {
-    log('_configureCell');
     final gameConfig = GameConfig.fromJson(
       Map<String, dynamic>.from(call.arguments),
     );
