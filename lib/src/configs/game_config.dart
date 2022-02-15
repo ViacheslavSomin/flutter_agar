@@ -1,7 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import 'package:flutter_agar/src/configs/cell_config.dart';
 import 'package:flutter_agar/src/configs/food_config.dart';
 import 'package:flutter_agar/src/configs/map_config.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'game_config.g.dart';
 
@@ -9,12 +10,14 @@ part 'game_config.g.dart';
 class GameConfig {
   GameConfig({
     required this.tickTime,
+    required this.tickLimit,
     required this.cellConfig,
     required this.mapConfig,
     required this.foodConfig,
   });
 
   final double tickTime;
+  final double tickLimit;
   final CellConfig cellConfig;
   final MapConfig mapConfig;
   final FoodConfig foodConfig;
@@ -30,6 +33,7 @@ class GameConfig {
 
     return other is GameConfig &&
         other.tickTime == tickTime &&
+        other.tickLimit == tickLimit &&
         other.cellConfig == cellConfig &&
         other.mapConfig == mapConfig &&
         other.foodConfig == foodConfig;
@@ -38,6 +42,7 @@ class GameConfig {
   @override
   int get hashCode {
     return tickTime.hashCode ^
+        tickLimit.hashCode ^
         cellConfig.hashCode ^
         mapConfig.hashCode ^
         foodConfig.hashCode;
@@ -45,6 +50,6 @@ class GameConfig {
 
   @override
   String toString() {
-    return 'GameConfig(tickTime: $tickTime, cellConfig: $cellConfig, mapConfig: $mapConfig, foodConfig: $foodConfig)';
+    return 'GameConfig(tickTime: $tickTime, tickLimit: $tickLimit, cellConfig: $cellConfig, mapConfig: $mapConfig, foodConfig: $foodConfig)';
   }
 }

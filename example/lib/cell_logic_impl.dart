@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter_agar/flutter_agar.dart';
 
-class CellLogicImpl implements CellLogic {
+class CellLogicImpl extends CellLogic {
   @override
   DesiredCellsState? handleGameUpdate(MapState mapState) {
     final myCells = mapState.myCells;
@@ -17,10 +19,7 @@ class CellLogicImpl implements CellLogic {
           cellId: myCell.cellId,
           speed: 1.0,
           velocity: cellPosition.moveTo(targetPosition),
-          growIntention: GrowIntention(
-            mass: myCell.availableEnergy * 0.3,
-            maxSpeed: myCell.availableEnergy * 0.7,
-          ),
+          growIntention: GrowIntention(mass: myCell.availableEnergy),
         ),
       );
     }

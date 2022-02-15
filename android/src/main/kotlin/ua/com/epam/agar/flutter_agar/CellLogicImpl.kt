@@ -5,17 +5,22 @@ import com.google.gson.Gson
 import io.flutter.plugin.common.MethodChannel
 import ua.com.epam.agar.hackathon.core.entity.cell.property.CellActivity
 import ua.com.epam.agar.hackathon.core.entity.cell.property.CellId
-import ua.com.epam.agar.hackathon.core.entity.cell.property.MoveAction
+import ua.com.epam.agar.hackathon.core.entity.cell.property.TurnAction
 import ua.com.epam.agar.hackathon.core.entity.main.DesiredCellsState
 import ua.com.epam.agar.hackathon.core.entity.main.MapState
 import ua.com.epam.agar.hackathon.core.entity.public_api.CellLogic
+import ua.com.epam.agar.hackathon.core.game.config.GameConfig
 
 @Suppress("UNCHECKED_CAST")
 class CellLogicImpl(private val methodChannel: MethodChannel) : CellLogic() {
 
     private val gson = Gson()
 
+    private lateinit var config: GameConfig
+
     override fun handleGameUpdate(mapState: MapState): DesiredCellsState? {
+        configureCell()
+
         val mapStateHashMap = convertMapStateToHashMap(mapState)
 
         val resultHashMap = methodChannel.invokeMethodSync(
@@ -24,6 +29,22 @@ class CellLogicImpl(private val methodChannel: MethodChannel) : CellLogic() {
         ) as? HashMap<String, Any?>
 
         return mapToDesiredCellsState(resultHashMap)
+    }
+
+    private fun configureCell() {
+        if (!this::config.isInitialized || config != getGameConfig()) {
+            config = getGameConfig()
+            methodChannel.invokeMethodSync(
+                Constants.CONFIGURE_CELL,
+                hashMapOf(
+                    "tickTime" to config.tickTime,
+                    "tickLimit" to config.tickLimit,
+                    "cellConfig" to config.cellConfig.asHashMap(),
+                    "mapConfig" to config.mapConfig.asHashMap(),
+                    "foodConfig" to config.foodConfig.asHashMap(),
+                )
+            )
+        }
     }
 
     private fun convertMapStateToHashMap(mapState: MapState): HashMap<String, Any> {
@@ -89,19 +110,25 @@ class CellLogicImpl(private val methodChannel: MethodChannel) : CellLogic() {
         }
     }
 
-    private fun mapAdditionalAction(hashMap: HashMap<String, Any?>?): MoveAction? {
+    private fun mapAdditionalAction(hashMap: HashMap<String, Any?>?): TurnAction? {
         if (hashMap == null) return null
 
-        if ((hashMap["type"] as String) == "merge") return MoveAction.Merge(
+        if ((hashMap["type"] as String) == "merge") return TurnAction.Merge(
             cellId = CellId(hashMap["cellId"] as String)
         )
 
-        return MoveAction.Split
+        return TurnAction.Split
     }
 
 
 }
 
+private fun CellLogicImpl.getGameConfig(): GameConfig {
+    return javaClass.superclass.getDeclaredField("gameConfig").let {
+        it.isAccessible = true
+        return@let it.get(this) as GameConfig
+    }
+}
 
 
 

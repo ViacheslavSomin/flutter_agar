@@ -47,7 +47,11 @@ class FlutterAgar {
     _channel.setMethodCallHandler((call) async {
       try {
         if (call.method == Constants.handleGameUpdate) {
-          return await _handleGameUpdate(call);
+          return _handleGameUpdate(call);
+        }
+        if (call.method == Constants.configureCell) {
+          _configureCell(call);
+          return null;
         }
       } catch (e, s) {
         log('$e\n\n$s');
@@ -55,12 +59,21 @@ class FlutterAgar {
     });
   }
 
-  Future<Map<String, dynamic>?> _handleGameUpdate(MethodCall call) async {
+  Map<String, dynamic>? _handleGameUpdate(MethodCall call) {
     final mapState = MapState.fromJson(
       Map<String, dynamic>.from(call.arguments),
     );
 
     return _cellLogic.handleGameUpdate(mapState)?.toJson();
+  }
+
+  void _configureCell(MethodCall call) {
+    log('_configureCell');
+    final gameConfig = GameConfig.fromJson(
+      Map<String, dynamic>.from(call.arguments),
+    );
+
+    _cellLogic.configure(gameConfig);
   }
 
   Future<void> initializeGameEngine(CellLogic cellLogic) async {

@@ -7,6 +7,7 @@ object Constants {
     const val STOP_GAME = "stopGame"
     const val ROOM_ID = "roomId"
     const val HANDLE_GAME_UPDATE = "handleGameUpdate"
+    const val CONFIGURE_CELL = "configureCell"
 
     const val TAG = "flutter_agar"
 }
