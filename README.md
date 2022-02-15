@@ -14,7 +14,6 @@
      flutter_agar:
        git:
          url: https://github.com/ViacheslavSomin/flutter_agar.git
-         ref: 0f9d5a2
    ```
 
 4. Create your own implementation of `CellLogic` class
@@ -22,7 +21,7 @@
    ```dart
    import 'package:flutter_agar/flutter_agar.dart';
 
-   class CellLogicImpl implements CellLogic {
+   class CellLogicImpl extends CellLogic {
      @override
      DesiredCellsState? handleGameUpdate(MapState mapState) {
        // Your logic
