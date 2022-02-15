@@ -16,8 +16,8 @@ class GameConfig {
     required this.foodConfig,
   });
 
-  final double tickTime;
-  final double tickLimit;
+  final num tickTime;
+  final num tickLimit;
   final CellConfig cellConfig;
   final MapConfig mapConfig;
   final FoodConfig foodConfig;
